@@ -3658,11 +3658,14 @@ async function exportPlanPDF(monthKey, plan, minimums) {
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(12);
       pdf.text(title, margin + 5, y + 4.8);
+      // Measure title width at its own font settings — getTextWidth uses the
+      // currently-active font, so we must measure BEFORE switching to the
+      // subtitle font. Otherwise the subtitle renders on top of the title.
+      const titleW = pdf.getTextWidth(title);
       if (sub) {
         pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(8.5);
         pdf.setTextColor(B.INK_55[0], B.INK_55[1], B.INK_55[2]);
-        const titleW = pdf.getTextWidth(title);
         pdf.text(sub, margin + 9 + titleW, y + 4.8);
       }
       return y + 9;
